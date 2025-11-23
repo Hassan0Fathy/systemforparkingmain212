@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  
+  parkingSpots ParkingSpot[]
+}
+
+model ParkingSpot {
+  id        Int      @id @default(autoincrement())
+  spotCode  String   @unique
+  isBusy    Boolean  @default(false)
+  userId    Int?
+  user      User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+  
+  visits    ParkingVisit[]
+}
+
+model ParkingVisit {
+  id        Int      @id @default(autoincrement())
+  spotId    Int
+  spot      ParkingSpot @relation(fields: [spotId], references: [id], onDelete: Cascade)
+  checkIn   DateTime @default(now())
+  checkOut  DateTime?
+  
+  @@index([spotId])
+}

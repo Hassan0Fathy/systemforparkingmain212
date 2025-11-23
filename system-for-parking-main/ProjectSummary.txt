@@ -1,0 +1,64 @@
+System for Parking — Project Summary
+
+Overview
+- Parking management system with two variants:
+- RoleSelector (2)/RoleSelector: full-stack Express + React app with PostgreSQL via Drizzle ORM
+- SmartParkingSystem-1/SmartParkingSystem-1: earlier variant with similar stack and schema
+
+Tech Stack
+- Backend: Node.js, Express, TypeScript, Drizzle ORM, PostgreSQL
+- Frontend: React (Vite), Tailwind CSS, Radix UI components, TanStack Query
+- Auth: session-based (server), role-based access control
+- Tooling: tsx, esbuild, TypeScript, dotenv
+
+Key Features
+- Admin and customer roles with protected routes
+- Car registration with QR code storage
+- QR scanning to check in/out
+- Visits log with duration and fee tracking
+- Excel/CSV export (admin) and basic dashboard pages
+
+Important Folders (RoleSelector variant)
+- client/: React app, pages and UI components
+- server/: Express app, routes and storage
+- shared/: Drizzle ORM schema and shared types
+- migrations/: Drizzle-generated SQL migrations (created after first push)
+
+Core Files
+- RoleSelector/drizzle.config.ts: Drizzle configuration
+- RoleSelector/shared/schema.ts: users, cars, visits tables
+- RoleSelector/server/storage.ts: database operations using drizzle-orm
+- RoleSelector/server/routes.ts: HTTP API endpoints
+
+Environment
+- Required: DATABASE_URL, SESSION_SECRET
+- Optional: PORT
+- Place variables in .env or .env.local in RoleSelector project root
+
+Scripts (RoleSelector/package.json)
+- dev: tsx server/index-dev.ts (development server)
+- build: vite build + esbuild server/index-prod.ts (production bundle)
+- start: node dist/index.js (run production server)
+- check: tsc (typecheck)
+- db:push: tsx push-db.ts (run Drizzle migrations)
+- seed:admin: tsx seed-admin.ts (seed first admin)
+
+How to Run (RoleSelector variant)
+- 1) Set DATABASE_URL in .env or .env.local
+- 2) npm install in RoleSelector folder
+- 3) npm run db:push to create tables
+- 4) npm run dev to start the app
+- 5) Open http://localhost:5000
+
+Database Schema (RoleSelector/shared/schema.ts)
+- users: id, username, password, role, createdAt
+- cars: id, plateNumber, ownerName, qrValue, qrCode, createdAt
+- visits: id, carId, plateNumber, ownerName, checkInTime, checkOutTime, duration, fee, isCheckedIn
+
+SmartParkingSystem-1 Notes
+- Similar structure and scripts; uses Drizzle and PostgreSQL
+- Refer to SmartParkingSystem-1/shared/schema.ts for table definitions
+
+Troubleshooting
+- If DATABASE_URL missing, set it in env file before db:push
+- For Windows, scripts use cross-env and tsx for compatibility
